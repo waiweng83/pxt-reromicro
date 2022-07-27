@@ -148,33 +148,37 @@ namespace reromicro {
     //% weight=85
     export function ReadLineSensors(): void {
 
-        let bFlag = true
         let nTimer = 1500
         let nMaxTimer = 1500
         let nStartTime = 0
-        let bPinState = 1
+        let nElapsedTime = 0
 
         // Read sensors
         for (let i = 0; i < 3; i++) {
-            nTimer = 1500
-            bFlag = true
             if (input.runningTimeMicros() >= 62000) {
                 control.waitMicros(4000)
             }
             disableIRQ()
+
             nStartTime = input.runningTimeMicros()
             pins.digitalWritePin(lineSensorPins[i], 1)
-            control.waitMicros(10)
+            control.waitMicros(50)
             pins.setPull(lineSensorPins[i], PinPullMode.PullNone)
-            while (bFlag == true && (input.runningTimeMicros() - nStartTime) < nMaxTimer) {
-                bPinState = pins.digitalReadPin(lineSensorPins[i])
-                if (bPinState == 0) {
-                    nTimer = input.runningTimeMicros() - nStartTime
-                    bFlag = false
+            while (1) {
+                nElapsedTime = input.runningTimeMicros() - nStartTime
+
+                if (pins.digitalReadPin(lineSensorPins[i]) == 0) {
+                    nTimer = nElapsedTime
+                    break
+                }
+                else if (nElapsedTime >= nMaxTimer) {
+                    nTimer = nMaxTimer
+                    break
                 }
             }
+
             enableIRQ()
-            lineSensorValues[i] = Math.clamp(0, 1500, nTimer)
+            lineSensorValues[i] = Math.clamp(0, nMaxTimer, nTimer)
         }
     }
 
