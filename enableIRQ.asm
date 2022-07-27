@@ -1,3 +1,4 @@
-enableIRQ:
-   cpsie i ; enable irq
+enableIRQAsm:
+
+    cpsie i ; enable irq
    

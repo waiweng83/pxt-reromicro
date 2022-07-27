@@ -1,2 +1,5 @@
-disableIRQ:
-   cpsid i ; disable irq
+disableIRQAsm:
+    
+    cpsid i ; disable irq
+
+

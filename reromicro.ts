@@ -42,6 +42,16 @@ namespace reromicro {
     if (board_ver == "1") {
         const_2divspeed = 40
     }
+
+    //% shim=enableIRQAsm
+    function enableIRQ() {
+        return
+    }
+
+    //% shim=disableIRQAsm
+    function disableIRQ() {
+        return
+    }
     
     /**
      * Read distance in centimeters (cm) with ultrasonic sensor.
@@ -151,6 +161,7 @@ namespace reromicro {
             if (input.runningTimeMicros() >= 62000) {
                 control.waitMicros(4000)
             }
+            disableIRQ()
             nStartTime = input.runningTimeMicros()
             pins.digitalWritePin(lineSensorPins[i], 1)
             control.waitMicros(10)
@@ -162,6 +173,7 @@ namespace reromicro {
                     bFlag = false
                 }
             }
+            enableIRQ()
             lineSensorValues[i] = Math.clamp(0, 1500, nTimer)
         }
     }
