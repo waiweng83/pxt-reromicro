@@ -9,7 +9,8 @@
     "files": [
         "README.md",
         "reromicro.ts",
-        "irq.asm"
+        "irq.asm",
+        "irq.cpp"
     ],
     "testFiles": [
         "test.ts"
